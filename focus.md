@@ -1,42 +1,42 @@
 # Focus
 
+Automated script to quickly launch distraction-free focus music from SongSara.
+
 ## Preview
 
-![music demo](./demo/focus-demo.gif)
+![Music Demo](./demo/focus-demo.gif)
 
-## Description
+## Overview
 
-In script baraye rahati dastresi ma be ye manbai az music haye bi kalam neveshte shode a betunim ke bedune talf kardan vaght ezafi rahat tar be listi az music haye bi kalam ke be tamarkoz kardan ruye kar komam mikonan dastresi dashte bashim.
-In manbai ke azash harf mizanim site **[songsara](https://songsara.net)** hastesh (albate ghesmate music haye tamarkozi).
-man vase in ke betunam az in site ye music pakhsh konam bayad site ro baz mikardam be ghesmat mored nazar miraftam va music ro play mikardam.
-Say kardam in flow ro automate koam ta betunam tu vaghtam sarfejui konam.
+Finding and playing background focus music can disrupt your workflow. **Focus** is a lightweight automation script designed to eliminate manual steps and open curated instrumental focus music directly from [SongSara](https://songsara.net).
 
-## Dependency
+It automates browser launching using an isolated Firefox profile, ensuring no VPN/Proxy conflicts with Iranian local services.
 
-**firefox**
-Man az firefox estefade kardam chon rush hich vpn nadaram va chon in site irani hast nabayad az dakhel iran ba filter shecan besh vsl shod.
-Baraye in ke script be dorosti kar kone lazeme ke shoma ye profile joda baraye **songsara** besazid tu **firefox**
-Shoma in karo mitunid ba datur zir anjam bedi:
+## Prerequisites
 
-```sh
-firefox -P
-```
+- **Firefox**
 
-Dar edame ye panjere baraye shoma baz mishe:
+### Why a dedicated profile?
 
-![firefox-profile](./demo/firefox_profile.gif)
+SongSara is an Iranian service and requires direct connection without a VPN/Proxy. To keep your main browsing session and network routing separate, this script relies on a dedicated Firefox profile.
 
-Pas as sakhte ye profile be esme **Music** (tavajoh konid ke script be in name vabastas pas be bozorgi o kuchaki huruf deghat konid). va login kardan tu account **songsara**, mitunid az command **[focus](#usage)** estefade konid.
+## Setup
 
-## Usage
+1. Open the Firefox Profile Manager:
 
-Shom faghat kafiye tu terminal khodetun az command zir estefade konid.
+   ```bash
+   firefox -P
+   ```
 
-```bash
-focus
-```
+2. Create a new profile named exactly **`Music`** _(case-sensitive)_.
 
-## How to Work?
+   ![Firefox Profile Setup](./demo/firefox_profile.gif)
 
-In script **firefox** ro ba profile login karde shoma tu **songsara** baz mikone va shomaro mostaghim tu ghesmat mood focus music ha mibare.
-Tanha kari ke shoma bayad anjam bedid ine ke music ro play konid va az shenidanesh lezat bebarid.
+3. Start Firefox with the `Music` profile and log in to your **SongSara** account.
+4. Close the browser.
+
+## How It Works
+
+1. Launches Firefox using the dedicated **`Music`** profile.
+2. Navigates directly to the SongSara _Focus / Instrumental_ playlist.
+3. Keeps your credentials and direct-connection setup preserved across runs.
