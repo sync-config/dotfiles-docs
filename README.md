@@ -26,7 +26,7 @@ Simply run:
 focus
 ```
 
-for more information see [Focus](https://github.com/sync-config/dotfiles-docs/blob/main/focus.md) page.
+for more information see [Focus](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/focus.md) page.
 
 **Tmux Project Manager**
 
@@ -36,7 +36,7 @@ Simply run:
 tpm
 ```
 
-for more information see [Tmux Project Manager](http://github.com/sync-config/dotfiles-docs/blob/main/scripts/Tmux_Project_Manager.md) page.
+for more information see [Tmux Project Manager](http://github.com/sync-config/dotfiles-docs/blob/main/scripts/tmux_project_manager.md) page.
 
 ---
 
@@ -48,7 +48,7 @@ for more information see [Tmux Project Manager](http://github.com/sync-config/do
 
 ##### Modules
 
-###### [Dotfiles](https://github.com/sync-config/dotfiles-docs/blob/main/dotfiles.md)
+###### [Dotfiles](https://github.com/sync-config/dotfiles-docs/blob/main/common/dotconfig/zsh/modules/dotfiles.md)
 
 ---
 
