@@ -4,6 +4,10 @@
 
 ---
 
+# Preview
+
+![lab](../../demo/lab-preview.gif)
+
 ## What it does
 
 `lab` gives you a fast `fzf` dashboard for managing isolated development environments inside a Git repository.
