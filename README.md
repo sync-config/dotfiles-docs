@@ -86,6 +86,8 @@ tpm
 
 ---
 
+## Setup
+
 ### Package Installer
 
 Automated package installer and synchronizer for base system dependencies.
