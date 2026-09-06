@@ -12,6 +12,7 @@ Central documentation hub for dotfiles configuration modules, developer tools, a
   - [Lab (Environment Manager)](#lab-environment-manager)
   - [Focus Mode](#focus-mode)
   - [Tmux Project Manager (TPM)](#tmux-project-manager-tpm)
+- [Setup](#setup)
   - [Package Installer](#package-installer)
 - [Configuration Modules](#-configuration-modules)
   - [Zsh Modules](#zsh-modules)
@@ -22,6 +23,14 @@ Central documentation hub for dotfiles configuration modules, developer tools, a
 ## 🧭 Overview
 
 This repository contains usage guides, architecture notes, and reference manuals for the utilities packaged within the [dotfiles](https://github.com/sync-config/dotfiles.git) ecosystem.
+
+---
+
+## Directory Organization
+
+- `setup/`: Contains setup and bootstrap scripts intended for installation workflow.
+- `bin/`: Reserved for reqular user binaries, scripts, and utilities exposed in `$PATH`.
+- `packages/`: Contains plain-text package grouped by Linux distribution.
 
 ---
 
