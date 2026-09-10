@@ -12,6 +12,7 @@ Central documentation hub for dotfiles configuration modules, developer tools, a
   - [Lab (Environment Manager)](#lab-environment-manager)
   - [Focus Mode](#focus-mode)
   - [Tmux Project Manager (TPM)](#tmux-project-manager-tpm)
+  - [IDE](#ide)
 - [Setup](#setup)
   - [Package Installer](#package-installer)
 - [Configuration Modules](#-configuration-modules)
@@ -41,6 +42,7 @@ This repository contains usage guides, architecture notes, and reference manuals
 | `lab`   | Ephemeral & persistent Git worktree dashboard (`fzf`) | [Lab Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/lab/user_guide.md)       |
 | `focus` | Distraction-free workspace / audio focus trigger      | [Focus Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/focus.md)              |
 | `tpm`   | Interactive tmux session & project workspace manager  | [TPM Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/tmux_project_manager.md) |
+| `ide`   | 3-Pane Tmux workspace with AI agent support           | [IDE](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/ide.md)                       |
 
 ---
 
@@ -83,6 +85,14 @@ tpm
 ```
 
 - **Full Guide:** See [Tmux Project Manager Documentation](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/tmux_project_manager.md).
+
+---
+
+### IDE
+
+Use the `ide` command to launch a pre-configured 3-pane tmux workspace with built-in AI agent support. This tool streamlines your development workflow by setting up an optimized .
+
+[**View `bin/ide` Usage & Configuration Guide**](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/ide.md)
 
 ---
 
