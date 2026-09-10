@@ -4,6 +4,8 @@ The `bin/ide` script automates the creation of a standardized 3-pane development
 
 ## Preview
 
+![ide](../demo/ide.gif)
+
 ## Key Features
 
 - **Clean Slate Execution:** The script automatically kills other existing in the current window before applying the layout to prevent overlapping or invalid split.
