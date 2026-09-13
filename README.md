@@ -112,7 +112,7 @@ sudo dns shecan
 ```
 
 - **Features:** Prevents network manager overwrites using filesystem immutability, zero-lockfile overhead, clear status inspection.
-- **Full Guide:** see [DNS Documentation](./scripts/dns.md)
+- **Full Guide:** see [DNS Documentation](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/dns.md)
 
 ## Setup
 

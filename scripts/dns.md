@@ -4,6 +4,8 @@ A lightweight, modular CLI tool designed to inspect, configure, and protect syst
 
 ## Preview
 
+![dns](../demo/dns.gif)
+
 ---
 
 ## Table of Contents
