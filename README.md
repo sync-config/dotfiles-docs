@@ -13,6 +13,7 @@ Central documentation hub for dotfiles configuration modules, developer tools, a
   - [Focus Mode](#focus-mode)
   - [Tmux Project Manager (TPM)](#tmux-project-manager-tpm)
   - [IDE](#ide)
+  - [DNS Management](#dns-management)
 - [Setup](#setup)
   - [Package Installer](#package-installer)
 - [Configuration Modules](#-configuration-modules)
@@ -30,6 +31,7 @@ This repository contains usage guides, architecture notes, and reference manuals
 ## Directory Organization
 
 - `setup/`: Contains setup and bootstrap scripts intended for installation workflow.
+- `lib/` : Modular internal libraries and shared helper logic for CLI tools.
 - `bin/`: Reserved for reqular user binaries, scripts, and utilities exposed in `$PATH`.
 - `packages/`: Contains plain-text package grouped by Linux distribution.
 
@@ -42,7 +44,8 @@ This repository contains usage guides, architecture notes, and reference manuals
 | `lab`   | Ephemeral & persistent Git worktree dashboard (`fzf`) | [Lab Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/lab/user_guide.md)       |
 | `focus` | Distraction-free workspace / audio focus trigger      | [Focus Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/focus.md)              |
 | `tpm`   | Interactive tmux session & project workspace manager  | [TPM Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/tmux_project_manager.md) |
-| `ide`   | 3-Pane Tmux workspace with AI agent support           | [IDE](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/ide.md)                       |
+| `ide`   | 3-Pane Tmux workspace with AI agent support           | [IDE Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/ide.md)                  |
+| `dns`   | System nameserver manager & Shecan DNS lock utility   | [DNS Docs](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/dns.md)                  |
 
 ---
 
@@ -95,6 +98,21 @@ Use the `ide` command to launch a pre-configured 3-pane tmux workspace with buil
 [**View `bin/ide` Usage & Configuration Guide**](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/ide.md)
 
 ---
+
+### DNS Management
+
+Unified CLI utility to inspect, lock, and manage system nameservers (including Shecan anti-sancition DNS) using Linux file attributes(`chattr +i/-i`)
+
+```bash
+# Check current status and lock state
+dns status
+
+# Apply Shecan nameservers and lock /etc/resolv.conf
+sudo dns shecan
+```
+
+- **Features:** Prevents network manager overwrites using filesystem immutability, zero-lockfile overhead, clear status inspection.
+- **Full Guide:** see [DNS Documentation](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/dns.md)
 
 ## Setup
 
