@@ -1,15 +1,16 @@
-# Tmux Project Manager
+# Tmux Project Manager (TPM)
 
 ![Tmux Project Manager Preview](../demo/tpm.gif)
 
-A lightweight terminal utility for managing project-based `tmux` sessions with an interactive [`fzf`](https://github.com/junegunn/fzf) interface.
+A lightweight terminal utility for managing project-based `tmux` sessions with an interactive [`fzf`](https://github.com/junegunn/fzf) interface and dynamic workspace directory resolution.
 
 The script allows you to:
 
-- Search through existing `tmux` sessions
+- Search through existing `tmux` sessions and workspace directories
 - Attach to a session from outside `tmux`
 - Switch to another session from inside `tmux`
-- Create a new project directory and `tmux` session when no matching session exists
+- Interactively configure and persist your root workspace directory (`PROJECT_DIR`)
+- Automaticaly create a new project directory and `tmux` session when no matching session exists
 - Delete a selected `tmux` session directly from the `fzf` interface
 
 ---
@@ -17,13 +18,14 @@ The script allows you to:
 ## Features
 
 - Interactive project/session search using `fzf`
-- Automatic detection of the current `tmux` context
-- Automatic `attach` or `switch-client`
-- Automatic creation of project directories
+- Dynamic environment configuration: prompts for workspace directory on first launch
+- Automatic detection of the current `tmux` context (`attach` vs `switch-client`)
+- Automatic creation of project directories under `$PROJECT_DIR`
 - Automatic creation of new `tmux` sessions
 - Session preview inside `fzf`
-- Deletion of sessions with `Ctrl+D`
-- Current session hidden from the session list
+- Session deletion directly from the picker using `Ctrl+D`
+- Current session hidden from the session list to avoid recursive attachment or accidental deletion
+- Support for inline runtime environment overrides
 
 ---
 
@@ -59,85 +61,121 @@ sudo apt install tmux fzf
 
 ---
 
-## Usage
+##‌ Configuration & Enviroment Management
+TPM relies on the `PROJECT_DIR` variable to locate your projects and scaffold new repositories.
+**First-Run Setup**
+if `PROJECT_DIR` is not yet configured, the script automatically triggers an interactive first-run setup:
 
-Run the project manager command:
+```text
+[TPM] PROJECT_DIR is not set.
+Please enter your base projects directory (e.g. ~/Projects or /home/user/workspace):
+> ~/Projects
+[TPM] Saved PROJECT_DIR to /lib/project_manager/.env
+```
+
+onece entered, the directory is validated, resolved, and saved.
+
+**Configuration File (`lib/project_manager/.env`)**
+
+- **File Location:** lib/project_manager/.env
+- **Git-lgnored & Machine-Specific:** This file is intentionally trached by `.gitignore` Your project path on your Arch workstation can differ from your laptop or server without creating dirty Git state.
+- **Content Format:** Standard POSIX key-value pairs:
 
 ```bash
+PROJECT_DIR="/home/user/Projects"
+```
+
+**Supported Path Formats**
+The setup script cleanly handles both relative shorthand and absolute paths:
+
+- **Tilde Expansion:** `~/Projects`, `~/work/repos` (expanded to `$HOME/...`)
+- **Absolute Paths:** `/home/user/Projects`, `/mnt/data/workspace`
+
+## Usage
+
+Run the project manager command via alias or direct binary:
+
+```bash
+# Using alias/symlink
+tpm
+
+# Or binary directly
 tmux-project-manager
 ```
 
-Depending on how the script is installed, you may also run it directly:
+**Manual Overrides**
+you can override your default porject directory at runtime without modifying your persisted configuration:
+
+1. **Runtime lnline Overrride (Temporary)**
+
+Run TPM targeting a different directory for a single execution:
 
 ```bash
-./tmux-project-manager
+PROJECT_DIR=~/work/client-b tpm
 ```
 
-After running the command, an interactive `fzf` window will open with the available `tmux` sessions.
+2. **Manual Configuration Update (Persistent)**
+
+To chenge your default workspace directory permanently, edit `lib/project_manager/.env`
+
+```bash
+# Open with your editor of choice
+nvim lib/project_manager/.env
+```
+
+Update the PROJECT_DIR value:
+
+```bash
+PROJECT_DIR="/home/user/NewWorkspace"
+```
 
 ---
 
 ## How It Works
 
-### 1. Search for a session
+### 1. Search for a session or Directory
 
-When the script starts, it displays the available `tmux` sessions in an interactive `fzf` interface.
+When the script starts, it list active `tmux` session alongside subdirectories in your `$PROJECT_DIR`.
 
-Type part of a session name to filter the list:
+Type part of a session or project name to filter the list:
 
 ```text
 Project> dot
 ```
 
-Then select the desired session and press `Enter`.
+Select the desired entry and press `Enter`.
 
 ### 2. Switch to a session from inside tmux
 
-If the command is executed from inside a `tmux` session, the script uses:
+If TPM is executed inside an active `tmux` window, it switches context using:
 
 ```bash
 tmux switch-client -t <session-name>
 ```
 
-This switches the current client to the selected session.
-
 ### 3. Attach to a session from outside tmux
 
-If the command is executed from a normal terminal, outside of `tmux`, the script uses:
+If executed from a standalone terminal shell, TPM attaches via:
 
 ```bash
 tmux attach-session -t <session-name>
 ```
 
-This attaches the terminal to the selected session.
+### 4. Create a New Project and Session
 
-### 4. Create a new project and session
+If you type a name that does not exist:
 
-If the entered project name does not match an existing `tmux` session, the script:
+1. TPM creates `$PROJECT_DIR/<new-project-name>`.
+2. It initializes a new session named `<new-project-name>` rooted in that folder.
+3. It immediately switches to or attaches the new session.
 
-1. Creates a new project directory
-2. Creates a new `tmux` session with the same name
-3. Starts the session in the new project directory
-
-For example, if you enter:
+For example, entering `api-gateway` creates:
 
 ```text
-my-new-project
+$PROJECT_DIR/api-gateway
 ```
 
-The script creates:
-
-```text
-<projects-directory>/my-new-project
-```
-
-and a `tmux` session named:
-
-```text
-my-new-project
-```
-
-The exact project directory is determined by the script configuration.
+and spawns a session named `api-gateway`
 
 ---
 
@@ -150,122 +188,65 @@ The exact project directory is determined by the script configuration.
 | `Esc`    | Exit without selecting a session                     |
 | Typing   | Filter existing sessions or enter a new project name |
 
-> Be careful when using `Ctrl+D`. Deleting a `tmux` session terminates all running processes and panes inside that session.
+> **warning:** Ctrl+D sends a kill command to the selected session.All running processes, panes, and buffers inside that session will be terminated immediatedly.
 
 ---
 
 ## Session Preview
 
-The `fzf` preview displays information about the selected session, such as:
+The `fzf` preview pane displays live diagnostics for the highlighted session:
 
-- Session name
-- Current working directory
-- Available windows
-- Recent output from the active pane
-
-This allows you to inspect a session before switching to or attaching to it.
+- Session name & creation date
+- Active working directory
+- Window and pane breakdown
+- Recent terminal scrollback/output from the active pane
 
 ---
 
-## Example Workflow
+## Troubleshooting & Reset
 
-Assume the following sessions exist:
+### Resetting configuration
 
-```text
-dotfiles
-airpart
-knowledge-base
-```
-
-You run:
+To re-trigger the interactive first-run prompt, simply remove the local `.env` file:
 
 ```bash
-tmux-project-manager
+rm -f lib/project_manager/.env
 ```
 
-Then:
+Next time you launch `tpm`, it will prompt for the directory setup again.
 
-1. Type `dot`
-2. Select `dotfiles`
-3. Press `Enter`
+### Verifying Environment Resolution
 
-The script will:
+Verify what TPM is reading by inspecting the configuration file:
 
-- Switch to `dotfiles` if you are already inside `tmux`
-- Attach to `dotfiles` if you are outside `tmux`
+```bash
+cat lib/project_manager/.env
+```
 
-To create a new project:
+Make sure the directory actually exists:
 
-1. Run the command
-2. Type a new name, for example `new-project`
-3. Press `Enter`
+```bash
+# Substiture your path path or read directly
+eval $(cat lib/project_manager/.env)
+ls -la "$PROJECT_DIR"
+```
 
-The script will create the project directory and its corresponding `tmux` session automatically.
-
----
-
-## Project and Session Naming
-
-Project directories and `tmux` sessions use the same name.
-
-For example:
-
-| Project       | Directory                          | tmux session  |
-| ------------- | ---------------------------------- | ------------- |
-| `dotfiles`    | `<projects-directory>/dotfiles`    | `dotfiles`    |
-| `airpart`     | `<projects-directory>/airpart`     | `airpart`     |
-| `new-project` | `<projects-directory>/new-project` | `new-project` |
-
-Using the same name for both makes projects and sessions easier to find and manage.
-
----
-
-## Troubleshooting
-
-### Check installed dependencies
+### Dependencies Check
 
 ```bash
 tmux -V
 fzf --version
 ```
 
-### List existing sessions
+### Check Active tmux Sessions
 
 ```bash
 tmux list-sessions
-```
-
-### Check whether a session exists
-
-```bash
-tmux has-session -t <session-name>
-```
-
-### Check the current tmux session
-
-```bash
-tmux display-message -p '#S'
-```
-
-### Make the script executable
-
-```bash
-chmod +x ./tmux-project-manager
-```
-
-### Run the script with Bash
-
-```bash
-bash ./tmux-project-manager
 ```
 
 ---
 
 ## Safety Notes
 
-- Deleting a session with `Ctrl+D` permanently terminates that `tmux` session.
-- All processes running inside the deleted session may also be terminated.
-- The current session is excluded from the list to prevent accidentally deleting the session currently in use.
-- Avoid using spaces or special characters in project/session names unless they are explicitly supported by the script.
-
----
+- Session Deletion: Ctrl+D permanently kills the target session. The active session you are currently working in is excluded from the picker list to protect against self-termination.
+- Directory Sanitization: Project directory names should avoid whitespace and non-POSIX shell characters (/, \, quotes) to prevent path resolution and session creation issues.
