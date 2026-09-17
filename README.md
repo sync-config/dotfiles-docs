@@ -80,12 +80,16 @@ focus
 
 ### Tmux Project Manager (TPM)
 
-Quickly attaches to, creates, or switches between tmux sessions across active projects.
+Quickly attaches to, creates, or switches between tmux sessions across active projects with dynamic project directory resolution.
 
 ```bash
 # Open interactive session switcher
 tpm
+# or
+project-manager
 ```
+
+**Note:** On is first run, TPM prompts for your workspace directory (PORJECT_DIR) and persists it to a local, machine-specific `lib/project_manager/.env` file.
 
 - **Full Guide:** See [Tmux Project Manager Documentation](https://github.com/sync-config/dotfiles-docs/blob/main/scripts/tmux_project_manager.md).
 
